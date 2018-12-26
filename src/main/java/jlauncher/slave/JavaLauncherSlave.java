@@ -7,12 +7,14 @@ import jlauncher.slave.controller.SlaveController;
 
 public class JavaLauncherSlave extends Application {
 
+    private SlaveController slaveController;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        SlaveController slaveController = new SlaveController();
+        slaveController = new SlaveController();
     }
 }

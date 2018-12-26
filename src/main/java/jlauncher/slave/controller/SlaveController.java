@@ -2,17 +2,23 @@ package jlauncher.slave.controller;
 
 import jlauncher.packets.StartPacket;
 import jlauncher.packets.StopPacket;
+import jlauncher.slave.GUI.GuiEvents;
+import jlauncher.slave.GUI.Tray;
 import jlauncher.slave.app.controller.AppController;
 import jlauncher.slave.app.server.SlaveServer;
 import jlauncher.slave.app.storage.AppStorage;
 
-public class SlaveController {
+public class SlaveController implements GuiEvents {
 
     private Integer defaultPort = 25552;
     private AppController appController = new AppController(new AppStorage());
     private SlaveServer server = new SlaveServer(defaultPort);
+    private Tray tray;
 
     public SlaveController(){
+
+        tray = new Tray(this);
+
         appController.addListener(data -> server.send(data));
 
         server.addListener(data -> {
@@ -39,4 +45,23 @@ public class SlaveController {
     }
 
 
+    @Override
+    public void restart() {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void exit() {
+        appController.stopAll();
+    }
 }
