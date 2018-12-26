@@ -6,46 +6,25 @@ import java.awt.image.BufferedImage;
 
 public class Tray {
 
-    private Boolean stopped = false;
+    private SystemTray tray;
+    private TrayIcon trayIcon;
 
     public Tray(GuiEvents eventsController){
         try {
             if (SystemTray.isSupported()) {
                 BufferedImage image = ImageIO.read(getClass().getResource("images/icon.png"));
-                PopupMenu popupMenu = new PopupMenu();
-                MenuItem itemStartStop = new MenuItem("Stop");
-                MenuItem itemRestart = new MenuItem("Restart");
-                MenuItem itemExit = new MenuItem("Exit");
-
-                popupMenu.add(itemStartStop);
-                popupMenu.add(itemRestart);
-                popupMenu.add(itemExit);
-
-                TrayIcon trayIcon = new TrayIcon(image, "LauncherSlave", popupMenu);
-
+                trayIcon = new TrayIcon(image, "LauncherSlave", new TrayMenu(eventsController));
                 trayIcon.setImageAutoSize(true);
-
-                itemStartStop.addActionListener(e -> {
-                    if(!stopped){
-                        stopped = true;
-                        eventsController.stop();
-                        itemStartStop.setLabel("Start");
-                    }else{
-                        stopped = false;
-                        eventsController.start();
-                        itemStartStop.setLabel("Stop");
-                    }
-                });
-
-                itemRestart.addActionListener(e -> eventsController.restart());
-                itemExit.addActionListener(e -> {
-                    eventsController.exit();
-                    System.exit(0);
-                });
-
-                SystemTray.getSystemTray().add(trayIcon);
-
+                tray = SystemTray.getSystemTray();
             }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void show(){
+        if(tray != null && trayIcon != null) try{
+            tray.add(trayIcon);
         }catch (Exception ex){
             ex.printStackTrace();
         }
