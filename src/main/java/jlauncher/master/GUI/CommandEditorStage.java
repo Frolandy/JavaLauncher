@@ -1,9 +1,8 @@
 package jlauncher.master.GUI;
 
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-public class CommandEditorStage {
+class CommandEditorStage {
 
     private double windowHeight = 600;
     private double windowWidth = 795;
@@ -13,9 +12,6 @@ public class CommandEditorStage {
 
     CommandEditorStage(){
         stage.setTitle("Command Editor");
-
-        VBox vBox = new VBox();
-
-        stage.setRoot(vBox);
+        stage.setRoot(new VBox(menu.getMenuBar(stage)));
     }
 }

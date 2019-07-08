@@ -18,6 +18,4 @@ public class MainStage {
     }
 
     Stage getPrimaryStage() { return this.stage; }
-
-
 }
