@@ -15,9 +15,12 @@ import java.io.File;
 
 class LauncherMenu {
 
-    Boolean isNewFile = false;
+    private Boolean isNewFile = false;
+    private MainStage stage;
 
-    MenuBar getMenuBar(Stage stage){
+    MenuBar getMenuBar(MainStage stage){
+        this.stage = stage;
+
         MenuBar menuBar = new MenuBar();
         menuBar.setMaxWidth(Double.MAX_VALUE);
         VBox.setVgrow(menuBar, Priority.ALWAYS);
@@ -26,9 +29,22 @@ class LauncherMenu {
         Menu fileMenu = new Menu("File");
         Menu toolsMenu = new Menu("Tools");
 
+        fileMenu.getItems().add(getOpenFileMenuItem(stage.getPrimaryStage()));
+
+        toolsMenu.getItems().add(getCommandEditorMenuItem());
+        toolsMenu.getItems().add(getVariableEditorMenuItem());
+
+        menuBar.getMenus().add(fileMenu);
+        menuBar.getMenus().add(toolsMenu);
+
+        return menuBar;
+    }
+
+    private MenuItem getOpenFileMenuItem(Stage stage){
         MenuItem openFileItem = new MenuItem("Open File");
 
         openFileItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+
         openFileItem.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
             chooser.setInitialDirectory(new File("./"));
@@ -37,11 +53,27 @@ class LauncherMenu {
             File file = chooser.showOpenDialog(stage);
         });
 
-        fileMenu.getItems().add(openFileItem);
+        return openFileItem;
+    }
 
-        menuBar.getMenus().add(fileMenu);
-        menuBar.getMenus().add(toolsMenu);
+    private MenuItem getCommandEditorMenuItem(){
+        MenuItem editorVarItem = new MenuItem("Command Editor");
 
-        return menuBar;
+        editorVarItem.setAccelerator(new KeyCodeCombination(KeyCode.F1));
+        editorVarItem.setOnAction(e -> new CommandEditorStage());
+
+        return editorVarItem;
+    }
+
+    private MenuItem getVariableEditorMenuItem(){
+        MenuItem editorVarItem = new MenuItem("Variable Editor");
+
+        editorVarItem.setAccelerator(new KeyCodeCombination(KeyCode.F2));
+
+        editorVarItem.setOnAction(e -> {
+
+        });
+
+        return editorVarItem;
     }
 }

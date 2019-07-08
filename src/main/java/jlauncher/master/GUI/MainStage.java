@@ -12,11 +12,12 @@ import javafx.stage.Stage;
 
 public class MainStage {
 
-    private int windowHeight = 500;
-    private int windowWidth = 695;
+    private double windowHeight = 500;
+    private double windowWidth = 695;
+    private Stage stage = new BaseStage(windowWidth, windowHeight);
     private LauncherMenu menu = new LauncherMenu();
 
-    public MainStage(Stage stage){
+    public MainStage(){
         stage.setTitle("Launcher");
         stage.setOnCloseRequest(e -> System.exit(0));
         stage.getIcons().add(new Image(getClass().getResourceAsStream("images/icon.png")));
@@ -25,7 +26,7 @@ public class MainStage {
         stage.setWidth(windowWidth);
         stage.setHeight(windowHeight);
 
-        VBox vbox = new VBox(menu.getMenuBar(stage));
+        VBox vbox = new VBox(menu.getMenuBar(this));
         vbox.setBackground(new Background(new BackgroundFill(Color.web("#4C4C4C"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         Scene scene = new Scene(vbox);
@@ -36,4 +37,8 @@ public class MainStage {
 
         stage.show();
     }
+
+    Stage getPrimaryStage() { return this.stage; }
+
+
 }

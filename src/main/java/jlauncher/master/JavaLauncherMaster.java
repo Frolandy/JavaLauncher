@@ -13,6 +13,6 @@ public class JavaLauncherMaster extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        MainStage mainStage = new MainStage(primaryStage);
+        MainStage mainStage = new MainStage();
     }
 }
