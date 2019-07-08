@@ -115,11 +115,12 @@ class CommandEditorMenu {
                 FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("*", "*.conf"); //TODO: (pathStorage.getConfigFileBase(), pathStorage.getConfigFileExtension())
                 File file = chooser.showOpenDialog(stage);
                 if(file != null){
-                    isNewFile = true;
+                    isNewFile = false;
                     //TODO: pathStorage.storageConfigDirectory(f)
+                    //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
                 }
             }
-            //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
+
         });
 
         return saveMenuItem;
@@ -136,10 +137,10 @@ class CommandEditorMenu {
             FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("*", "*.conf"); //TODO: (pathStorage.getConfigFileBase(), pathStorage.getConfigFileExtension())
             File file = chooser.showOpenDialog(stage);
             if(file != null){
-                isNewFile = true;
+                isNewFile = false;
                 //TODO: pathStorage.storageConfigDirectory(f)
+                //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
             }
-            //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
         });
 
         return saveAsMenuItem;
