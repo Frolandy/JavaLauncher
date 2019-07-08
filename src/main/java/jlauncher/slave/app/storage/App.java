@@ -12,7 +12,7 @@ class App implements ApplicationApi {
     private Process process;
     private String appName;
 
-    public App(String name){
+    App(String name){
         appName = name;
         processBuilder = new ProcessBuilder();
     }
