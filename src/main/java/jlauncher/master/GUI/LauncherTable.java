@@ -113,7 +113,6 @@ class LauncherTable {
         column.setEditable(false);
         column.setMaxWidth(50);
         column.setPrefWidth(50);
-        column.setText("Req");
         column.setMinWidth(50);
         column.setSortable(true);
         column.setCellValueFactory(node -> node.getValue().requestButtonProperty);
@@ -142,12 +141,10 @@ class LauncherTable {
                 if (item != null && !empty) {
                     this.styleProperty().unbindBidirectional(simpleBinding);
                     StringBinding styleBinding = Bindings.createStringBinding(() -> {
-                        if(item.onlineStatus.get() == OnlineStatus.Offline){
-                            return "-fx-background-color: red;";
-                        }else{
-                            if(item.reply.get() == LaunchStatus.Started){
-                                return "-fx-background-color: green;";
-                            }else return "-fx-background-color: #3A3A3A;";
+                        if(item.onlineStatus.get() == OnlineStatus.Offline) return "-fx-background-color: red;";
+                        else{
+                            if(item.reply.get() == LaunchStatus.Started) return "-fx-background-color: green;";
+                            else return "-fx-background-color: #3A3A3A;";
                         }
                     }, item.reply, item.onlineStatus);
                     this.styleProperty().bind(styleBinding);
@@ -168,8 +165,7 @@ class LauncherTable {
         private ObjectProperty<LaunchStatus> launcherStatus = new SimpleObjectProperty<>(LaunchStatus.Stopped);
         private StringProperty launchStatusStringProperty = new SimpleStringProperty("");
         private ObjectProperty<OnlineStatus> onlineStatus = new SimpleObjectProperty<>(OnlineStatus.Offline);
-        private ObjectProperty<LaunchStatus> reply = new SimpleObjectProperty<>(LaunchStatus.Stopped);
-
+        private ObjectProperty<LaunchStatus> reply = new SimpleObjectProperty<>(LaunchStatus.Empty);
 
         LauncherTableItemInfo(){
             onlineButton.setPrefHeight(15);
@@ -179,19 +175,48 @@ class LauncherTable {
 
             requestButton.setPrefWidth(20);
             requestButton.setPrefHeight(20);
-            parseLaunchStatus(launcherStatus.get(), false);
-            launcherStatus.addListener((obs, oldVal, newVal) -> parseLaunchStatus(newVal, true));
+            parseLaunchStatus(launcherStatus.get());
+            launcherStatus.addListener((obs, oldVal, newVal) -> parseLaunchStatus(newVal));
+
+            parseReplyStatus(reply.get());
+            reply.addListener((obs, olVal, newVal) -> parseReplyStatus(newVal));
         }
 
-        private void parseLaunchStatus(LaunchStatus status, boolean isAction){
+        private void parseReplyStatus(LaunchStatus status){
             requestButton.getStyleClass().clear();
+            launchStatusStringProperty.set("");
             switch (status){
                 case Started:
                     requestButton.getStyleClass().add("started-icon");
+                    launchStatusStringProperty.set("Started");
                 case Stopped:
+                    launchStatusStringProperty.set("Stopped");
                     requestButton.getStyleClass().add("stopped-icon");
-                default: if(isAction)
-                        if(onlineStatus.get() != OnlineStatus.Online) requestButton.getStyleClass().add("stopped-icon");
+                default:
+                    if(onlineStatus.get() == OnlineStatus.Offline) requestButton.getStyleClass().clear();
+                    else {
+                        launchStatusStringProperty.set("Stopped");
+                        requestButton.getStyleClass().add("stopped-icon");
+                    }
+            }
+        }
+
+        private void parseLaunchStatus(LaunchStatus status){
+            requestButton.getStyleClass().clear();
+            launchStatusStringProperty.set("");
+            switch (status){
+                case Started:
+                    requestButton.getStyleClass().add("started-icon");
+                    launchStatusStringProperty.set("Starting");
+                case Stopped:
+                    launchStatusStringProperty.set("Stopping");
+                    requestButton.getStyleClass().add("stopped-icon");
+                default:
+                    if(onlineStatus.get() == OnlineStatus.Offline) requestButton.getStyleClass().clear();
+                    else {
+                        launchStatusStringProperty.set("Stopping");
+                        requestButton.getStyleClass().add("stopped-icon");
+                    }
             }
         }
 
