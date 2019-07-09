@@ -14,4 +14,6 @@ class CommandEditorStage {
         stage.setTitle("Command Editor");
         stage.setRoot(new VBox(menu.getMenuBar(stage), table.getTable()));
     }
+
+
 }

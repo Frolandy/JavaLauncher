@@ -19,9 +19,9 @@ public class AppStorage {
         }
     }
 
-    public Boolean remove(String name){
+    public boolean remove(String name){
         if(applications.containsKey(name)) {
-            Boolean stopped = applications.get(name).stop();
+            boolean stopped = applications.get(name).stop();
             if(stopped) applications.remove(name);
             return stopped;
         }else return false;

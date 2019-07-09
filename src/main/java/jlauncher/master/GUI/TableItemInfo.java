@@ -65,7 +65,7 @@ abstract class TableItemInfo {
         dir.set(value);
     }
 
-    public void setEnable(Boolean value) {
+    public void setEnable(boolean value) {
         enable.set(value);
     }
 

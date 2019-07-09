@@ -4,7 +4,7 @@ import java.awt.*;
 
 class TrayMenu extends PopupMenu {
 
-    private Boolean stopped = false;
+    private boolean stopped = false;
 
     TrayMenu(GuiEvents eventsController){
 

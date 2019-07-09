@@ -16,12 +16,12 @@ public interface ApplicationApi {
 
     List<String> getCmd();
 
-    Boolean start(Listener<AppLog> logListener);
+    boolean start(Listener<AppLog> logListener);
 
     String getName();
 
-    Boolean stop();
+    boolean stop();
 
-    Boolean isAlive();
+    boolean isAlive();
 
 }

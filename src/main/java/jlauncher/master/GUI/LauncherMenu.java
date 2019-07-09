@@ -15,7 +15,7 @@ import java.io.File;
 
 class LauncherMenu {
 
-    private Boolean isNewFile = false;
+    private boolean isNewFile = false;
     private MainStage stage;
 
     MenuBar getMenuBar(MainStage stage){

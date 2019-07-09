@@ -8,10 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.collections.ObservableList;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jlauncher.utils.Callback;
+import jlauncher.utils.TableUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +20,13 @@ class CommandEditorTable {
     private List<CommandTableItemInfo> applicationList = new ArrayList<>();
     private ObservableList<CommandTableItemInfo> applications = FXCollections.observableArrayList(applicationList);
     private TableView<CommandTableItemInfo> table;
-    private Double windowHeight;
+    private double windowHeight;
 
     private enum StringColumns{
         Name, Group, Cmd, Dir, ComputerAddress, Delay
     }
 
-    CommandEditorTable(Double windowHeight){
+    CommandEditorTable(double windowHeight){
         this.windowHeight = windowHeight;
         Platform.runLater(() -> applications.add(new CommandTableItemInfo()));
     }
@@ -49,15 +49,41 @@ class CommandEditorTable {
         VBox.setVgrow(_table, Priority.ALWAYS);
 
         _table.getColumns().add(getEnableColumn());
-        _table.getColumns().add(getStringColumn(_table, "Name", 7.0, getCallback(StringColumns.Name)));
-        _table.getColumns().add(getStringColumn(_table, "Group", 7.0, getCallback(StringColumns.Group)));
-        _table.getColumns().add(getStringColumn(_table, "Cmd", 3.7, getCallback(StringColumns.Cmd)));
-        _table.getColumns().add(getStringColumn(_table, "Dir", 7.0, getCallback(StringColumns.Dir)));
-        _table.getColumns().add(getStringColumn(_table, "Address", 7.6, getCallback(StringColumns.ComputerAddress)));
-        _table.getColumns().add(getStringColumn(_table, "Delay", 10.0, getCallback(StringColumns.Delay)));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.Name));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.Group));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.Cmd));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.Dir));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.ComputerAddress));
+        _table.getColumns().add(getTableColumn(_table, StringColumns.Delay));
 
         table = _table;
         return _table;
+    }
+
+    private TableColumn<CommandTableItemInfo, String> getTableColumn(TableView<CommandTableItemInfo> _table, StringColumns column){
+        switch(column){
+            case Name:
+                return TableUtils.getStringColumn
+                        (_table, "Name", 7.0, true, true, getCallback(column));
+            case Cmd:
+                return TableUtils.getStringColumn
+                        (_table, "Cmd", 3.7, true, true, getCallback(column));
+            case Dir:
+                return TableUtils.getStringColumn
+                        (_table, "Dir", 7.0, true, true, getCallback(column));
+            case Group:
+                return TableUtils.getStringColumn
+                        (_table, "Group", 7.0, true, true, getCallback(column));
+            case Delay:
+                return TableUtils.getStringColumn
+                        (_table, "Delay", 10.0, true, true, getCallback(column));
+            case ComputerAddress:
+                return TableUtils.getStringColumn
+                        (_table, "Address", 7.6, true, true, getCallback(column));
+            default:
+                return TableUtils.getStringColumn
+                        (_table, "Undefined", 7.0, true, true, getCallback(column));
+        }
     }
 
     private NodeTableColumn<CommandTableItemInfo> getEnableColumn(){
@@ -67,22 +93,6 @@ class CommandEditorTable {
         column.setPrefWidth(40);
         column.setCellValueFactory(node -> node.getValue().getButtonProperty());
         column.setResizable(false);
-        return column;
-    }
-
-    private TableColumn<CommandTableItemInfo, String> getStringColumn(TableView<CommandTableItemInfo> table,
-                                                                      String name,
-                                                                      Double offset,
-                                                                      Callback<CommandTableItemInfo, StringProperty> callback){
-        TableColumn<CommandTableItemInfo, String> column =  new TableColumn<>();
-        column.setEditable(true);
-        column.setSortable(true);
-        column.setText(name);
-        column.setPrefWidth(table.getWidth() / offset);
-        table.widthProperty().addListener((obs, oldVal, newVal) -> column.setPrefWidth(newVal.doubleValue() / offset));
-        column.setCellValueFactory(node -> callback.apply(node.getValue()));
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-        column.setResizable(true);
         return column;
     }
 
@@ -115,7 +125,7 @@ class CommandEditorTable {
             setButtonStyleClass(false);
         }
 
-        private void setButtonStyleClass(Boolean isAction){
+        private void setButtonStyleClass(boolean isAction){
             if(getEnableProperty().get()) {
                 if(isAction) setEnable(false);
                 enableButton.getStyleClass().clear();

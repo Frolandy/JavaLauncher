@@ -41,7 +41,7 @@ class App implements ApplicationApi {
     }
 
     @Override
-    public Boolean start(Listener<AppLog> logListener) {
+    public boolean start(Listener<AppLog> logListener) {
         try{
             process = processBuilder.start();
             return true;
@@ -57,7 +57,7 @@ class App implements ApplicationApi {
     }
 
     @Override
-    public Boolean stop() {
+    public boolean stop() {
         if(process != null){
             process.destroy();
             return true;
@@ -65,7 +65,7 @@ class App implements ApplicationApi {
     }
 
     @Override
-    public Boolean isAlive() {
+    public boolean isAlive() {
         if(process != null) return process.isAlive();
         else return false;
     }

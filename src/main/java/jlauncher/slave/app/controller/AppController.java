@@ -29,11 +29,11 @@ public class AppController {
         statusListener.add(listener);
     }
 
-    public Boolean start(String appName, String dir, String cmd, Listener<AppLog> listener){
+    public boolean start(String appName, String dir, String cmd, Listener<AppLog> listener){
         return appStorage.add(appName).setDir(new File(dir)).setCmd(cmd).start(listener);
     }
 
-    public Boolean stop(String name){
+    public boolean stop(String name){
         return appStorage.remove(name);
     }
 
