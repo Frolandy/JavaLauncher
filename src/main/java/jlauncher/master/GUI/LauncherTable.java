@@ -30,7 +30,7 @@ class LauncherTable {
     }
 
     public enum OnlineStatus{
-        Online, Offline, Empty
+        Online, Offline
     }
 
     private enum StringColumns{
@@ -162,7 +162,7 @@ class LauncherTable {
         private Button onlineButton = new Button();
         private ObjectProperty<Node> requestButtonProperty = new SimpleObjectProperty<>(requestButton);
         private ObjectProperty<Node> onlineButtonProperty = new SimpleObjectProperty<>(onlineButton);
-        private ObjectProperty<LaunchStatus> launcherStatus = new SimpleObjectProperty<>(LaunchStatus.Stopped);
+        private ObjectProperty<LaunchStatus> launcherStatus = new SimpleObjectProperty<>(LaunchStatus.Empty);
         private StringProperty launchStatusStringProperty = new SimpleStringProperty("");
         private ObjectProperty<OnlineStatus> onlineStatus = new SimpleObjectProperty<>(OnlineStatus.Offline);
         private ObjectProperty<LaunchStatus> reply = new SimpleObjectProperty<>(LaunchStatus.Empty);
