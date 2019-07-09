@@ -1,27 +1,87 @@
 package jlauncher.master.GUI;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
-public interface TableItemInfo {
-    StringProperty getComputerAddressProperty();
-    StringProperty getAppNameProperty();
-    StringProperty getCommandProperty();
-    StringProperty getDirectoryProperty();
-    BooleanProperty getEnableProperty();
-    StringProperty getGroupProperty();
-    StringProperty getIdProperty();
-    StringProperty getDelayProperty();
-    ObjectProperty<String[]> getObjectProperty();
+abstract class TableItemInfo {
+    private StringProperty computerAddress = new SimpleStringProperty("");
+    private StringProperty appName = new SimpleStringProperty("");
+    private StringProperty group = new SimpleStringProperty("");
+    private StringProperty cmd = new SimpleStringProperty("");
+    private StringProperty dir = new SimpleStringProperty("");
+    private BooleanProperty enable = new SimpleBooleanProperty(false);
+    private StringProperty delay = new SimpleStringProperty("");
+    private StringProperty id = new SimpleStringProperty("");
+    private ObjectProperty<String[]> onStopCommands = new SimpleObjectProperty<>(new String[0]);
 
-    void setComputerAddressProperty(String value);
-    void setAppNameProperty(String value);
-    void setCommandProperty(String value);
-    void setDirectoryProperty(String value);
-    void setEnableProperty(Boolean value);
-    void setGroupProperty(String value);
-    void setIdProperty(String value);
-    void setDelayProperty(String value);
-    void setObjectProperty(String[] value);
+    public StringProperty getComputerAddressProperty() {
+        return computerAddress;
+    }
+
+    public StringProperty getAppNameProperty() {
+        return appName;
+    }
+
+    public StringProperty getCommandProperty() {
+        return cmd;
+    }
+
+    public StringProperty getDirectoryProperty() {
+        return dir;
+    }
+
+    public BooleanProperty getEnableProperty() {
+        return enable;
+    }
+
+    public StringProperty getGroupProperty() {
+        return group;
+    }
+
+    public StringProperty getIdProperty() {
+        return id;
+    }
+
+    public StringProperty getDelayProperty() {
+        return delay;
+    }
+
+    public ObjectProperty<String[]> getObjectProperty() {
+        return onStopCommands;
+    }
+
+    public void setComputerAddress(String value) {
+        computerAddress.set(value);
+    }
+
+    public void setAppName(String value) {
+        appName.set(value);
+    }
+
+    public void setCommand(String value) {
+        cmd.set(value);
+    }
+
+    public void setDirectory(String value) {
+        dir.set(value);
+    }
+
+    public void setEnable(Boolean value) {
+        enable.set(value);
+    }
+
+    public void setGroup(String value) {
+        group.set(value);
+    }
+
+    public void setId(String value) {
+        id.set(value);
+    }
+
+    public void setDelay(String value) {
+        delay.set(value);
+    }
+
+    public void setStopCommands(String[] value) {
+        onStopCommands.set(value);
+    }
 }

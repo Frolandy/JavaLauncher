@@ -38,12 +38,14 @@ class CommandEditorTable {
 
     private TableView<CommandTableItemInfo> crateNewTable(){
         TableView<CommandTableItemInfo> _table = new TableView<>(applications);
+
         _table.setMaxWidth(Double.MAX_VALUE);
         _table.setMaxHeight(600);
         _table.setPrefWidth(windowHeight / 2);
         _table.setMaxHeight(windowHeight / 2);
         _table.setItems(applications);
         _table.setEditable(true);
+
         VBox.setVgrow(_table, Priority.ALWAYS);
 
         _table.getColumns().add(getEnableColumn());
@@ -53,6 +55,7 @@ class CommandEditorTable {
         _table.getColumns().add(getStringColumn(_table, "Dir", 7.0, getCallback(StringColumns.Dir)));
         _table.getColumns().add(getStringColumn(_table, "Address", 7.6, getCallback(StringColumns.ComputerAddress)));
         _table.getColumns().add(getStringColumn(_table, "Delay", 10.0, getCallback(StringColumns.Delay)));
+
         table = _table;
         return _table;
     }
@@ -100,17 +103,8 @@ class CommandEditorTable {
         };
     }
 
-    class CommandTableItemInfo implements TableItemInfo{
+    class CommandTableItemInfo extends TableItemInfo{
 
-        private StringProperty computerAddress = new SimpleStringProperty("");
-        private StringProperty appName = new SimpleStringProperty("");
-        private StringProperty group = new SimpleStringProperty("");
-        private StringProperty cmd = new SimpleStringProperty("");
-        private StringProperty dir = new SimpleStringProperty("");
-        private BooleanProperty enable = new SimpleBooleanProperty(false);
-        private StringProperty delay = new SimpleStringProperty("");
-        private StringProperty id = new SimpleStringProperty("");
-        private ObjectProperty<String[]> onStopCommands = new SimpleObjectProperty<>(new String[0]);
         private Button enableButton = new Button();
         private ObjectProperty<Node> enableButtonProperty = new SimpleObjectProperty<>(enableButton);
 
@@ -122,13 +116,13 @@ class CommandEditorTable {
         }
 
         private void setButtonStyleClass(Boolean isAction){
-            if(enable.get()) {
-                if(isAction) enable.setValue(false);
+            if(getEnableProperty().get()) {
+                if(isAction) setEnable(false);
                 enableButton.getStyleClass().clear();
                 enableButton.getStyleClass().add("rb-on");
             }
             else {
-                if(isAction) enable.setValue(true);
+                if(isAction) setEnable(true);
                 enableButton.getStyleClass().clear();
                 enableButton.getStyleClass().add("rb-off");
             }
@@ -136,96 +130,6 @@ class CommandEditorTable {
 
         ObjectProperty<Node> getButtonProperty(){
             return enableButtonProperty;
-        }
-
-        @Override
-        public StringProperty getComputerAddressProperty() {
-            return computerAddress;
-        }
-
-        @Override
-        public StringProperty getAppNameProperty() {
-            return appName;
-        }
-
-        @Override
-        public StringProperty getCommandProperty() {
-            return cmd;
-        }
-
-        @Override
-        public StringProperty getDirectoryProperty() {
-            return dir;
-        }
-
-        @Override
-        public BooleanProperty getEnableProperty() {
-            return enable;
-        }
-
-        @Override
-        public StringProperty getGroupProperty() {
-            return group;
-        }
-
-        @Override
-        public StringProperty getIdProperty() {
-            return id;
-        }
-
-        @Override
-        public StringProperty getDelayProperty() {
-            return delay;
-        }
-
-        @Override
-        public ObjectProperty<String[]> getObjectProperty() {
-            return onStopCommands;
-        }
-
-        @Override
-        public void setComputerAddressProperty(String value) {
-            computerAddress.set(value);
-        }
-
-        @Override
-        public void setAppNameProperty(String value) {
-            appName.set(value);
-        }
-
-        @Override
-        public void setCommandProperty(String value) {
-            cmd.set(value);
-        }
-
-        @Override
-        public void setDirectoryProperty(String value) {
-            dir.set(value);
-        }
-
-        @Override
-        public void setEnableProperty(Boolean value) {
-            enable.set(value);
-        }
-
-        @Override
-        public void setGroupProperty(String value) {
-            group.set(value);
-        }
-
-        @Override
-        public void setIdProperty(String value) {
-            id.set(value);
-        }
-
-        @Override
-        public void setDelayProperty(String value) {
-            delay.set(value);
-        }
-
-        @Override
-        public void setObjectProperty(String[] value) {
-            onStopCommands.set(value);
         }
     }
 }
