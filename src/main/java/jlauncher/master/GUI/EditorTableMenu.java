@@ -10,14 +10,21 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import jlauncher.master.path.storage.PathStorage;
 import java.io.File;
 
-class CommandEditorMenu {
+class EditorTableMenu {
 
     private boolean isNewFile = false;
+    private AbstractTable abstractTable;
+    private PathStorage pathStorage = PathStorage.getInstance();
+
+    EditorTableMenu(AbstractTable table){
+        abstractTable = table;
+    }
 
     MenuBar getMenuBar(Stage stage){
         MenuBar menuBar = new MenuBar();
@@ -47,9 +54,7 @@ class CommandEditorMenu {
         MenuItem addRowMenuItem = new MenuItem("Add row");
 
         addRowMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.INSERT));
-        addRowMenuItem.setOnAction(e -> Platform.runLater(() -> {
-            //TODO: mainStage.addEmptyModel();
-        }));
+        addRowMenuItem.setOnAction(e -> Platform.runLater(() -> abstractTable.addNewItem()));
 
         return addRowMenuItem;
     }
@@ -58,9 +63,7 @@ class CommandEditorMenu {
         MenuItem removeRowMenuItem = new MenuItem("Remove row");
 
         removeRowMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.DELETE));
-        removeRowMenuItem.setOnAction(e -> {
-            //TODO: mainStage.removeItem();
-        });
+        removeRowMenuItem.setOnAction(e -> abstractTable.removeItem());
 
         return removeRowMenuItem;
     }
@@ -72,9 +75,7 @@ class CommandEditorMenu {
 
         newFileMenuItem.setOnAction(e -> {
             isNewFile = true;
-            Platform.runLater(() -> {
-                //TODO: mainStage.clearAll();
-            });
+            Platform.runLater(() -> abstractTable.clear());
         });
 
         return newFileMenuItem;
@@ -87,15 +88,16 @@ class CommandEditorMenu {
 
         openFileMenuItem.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
-            chooser.setInitialDirectory(new File("./")); //TODO: (pathStorage.getCurrentDirectory())
-            FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("*", "*.conf"); //TODO: (pathStorage.getConfigFileBase(), pathStorage.getConfigFileExtension())
+            chooser.setInitialDirectory(new File(pathStorage.getCurrentDir()));
+            FileChooser.ExtensionFilter filter =
+                    new FileChooser.ExtensionFilter(pathStorage.getConfigFileBase(),pathStorage.getConfigFileExtension());
             File file = chooser.showOpenDialog(stage);
             if(file != null){
                 isNewFile = false;
-                //TODO: pathStorage.changeCurrentPathToFile(file);
+                pathStorage.changeCurrentPathToFile(file);
                 Platform.runLater(() -> {
-                    //TODO: mainStage.clearAll();
-                    //TODO: mainStage.readConfig();
+                    abstractTable.clear();
+                    abstractTable.readConfig();
                 });
             }
         });
@@ -111,13 +113,14 @@ class CommandEditorMenu {
         saveMenuItem.setOnAction(e -> {
             if(isNewFile){
                 FileChooser chooser = new FileChooser();
-                chooser.setInitialDirectory(new File("./")); //TODO: (pathStorage.getCurrentDirectory())
-                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("*", "*.conf"); //TODO: (pathStorage.getConfigFileBase(), pathStorage.getConfigFileExtension())
+                chooser.setInitialDirectory(new File(pathStorage.getCurrentDir()));
+                FileChooser.ExtensionFilter filter =
+                        new FileChooser.ExtensionFilter(pathStorage.getConfigFileBase(),pathStorage.getConfigFileExtension());
                 File file = chooser.showOpenDialog(stage);
                 if(file != null){
                     isNewFile = false;
-                    //TODO: pathStorage.storageConfigDirectory(f)
-                    //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
+                    pathStorage.storeConfigDir(file);
+                    abstractTable.saveConfig();
                 }
             }
 
@@ -132,14 +135,13 @@ class CommandEditorMenu {
         saveAsMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 
         saveAsMenuItem.setOnAction(e -> {
-            FileChooser chooser = new FileChooser();
-            chooser.setInitialDirectory(new File("./")); //TODO: (pathStorage.getCurrentDirectory())
-            FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("*", "*.conf"); //TODO: (pathStorage.getConfigFileBase(), pathStorage.getConfigFileExtension())
-            File file = chooser.showOpenDialog(stage);
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setInitialDirectory(new File(pathStorage.getCurrentDir()));
+            File file = chooser.showDialog(stage);
             if(file != null){
                 isNewFile = false;
-                //TODO: pathStorage.storageConfigDirectory(f)
-                //TODO: mainStage.saveConfig(pathStorage.getCurrentPathToFile())
+                pathStorage.storeConfigDir(file);
+                abstractTable.saveConfig();
             }
         });
 

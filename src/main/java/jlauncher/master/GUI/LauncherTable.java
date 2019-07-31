@@ -4,25 +4,16 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jlauncher.utils.Callback;
 import jlauncher.utils.TableUtils;
-import java.util.ArrayList;
-import java.util.List;
 
-class LauncherTable {
+class LauncherTable extends AbstractTable<LauncherTable.LauncherTableItemInfo> {
 
-    private List<LauncherTableItemInfo> applicationList = new ArrayList<>();
-    private ObservableList<LauncherTableItemInfo> applications = FXCollections.observableArrayList(applicationList);
-    private TableView<LauncherTableItemInfo> table;
     private double windowHeight;
 
     public enum LaunchStatus{
@@ -37,39 +28,51 @@ class LauncherTable {
         Name, Computer, Group, LaunchStatus
     }
 
+    public void configureMenu(){
+        TableUtils.configureMenu(table, new Callback<LauncherTableItemInfo, ObservableList<MenuItem>>(){
+            @Override
+            public ObservableList<MenuItem> apply(LauncherTableItemInfo arg) {
+                return getContextMenu(arg).getItems();
+            }
+        });
+    }
+
     LauncherTable(double windowHeight){
         this.windowHeight = windowHeight;
-        Platform.runLater(() -> applications.add(new LauncherTableItemInfo()));
     }
 
-    TableView<LauncherTableItemInfo> getTable(){
-        if(table != null) return table;
-        else return createTable();
+    void removeItem(LauncherTableItemInfo item){
+        items.remove(item);
     }
 
-    private TableView<LauncherTableItemInfo> createTable(){
-        TableView<LauncherTableItemInfo> _table = new TableView<>(applications);
+    @Override
+    void setColumns() {
+        table.getColumns().add(getRequestTableColumn());
+        table.getColumns().add(getTableColumn(table, StringColumns.Name));
+        table.getColumns().add(getTableColumn(table, StringColumns.Computer));
+        table.getColumns().add(getTableColumn(table, StringColumns.Group));
+        table.getColumns().add(getTableColumn(table, StringColumns.LaunchStatus));
+        table.getColumns().add(getOnlineTableColumn(table));
+    }
+
+    protected TableView<LauncherTableItemInfo> createNewTable(){
+        TableView<LauncherTableItemInfo> _table = super.createNewTable();
 
         _table.setMaxWidth(Double.MAX_VALUE);
         _table.setPrefHeight(Double.MAX_VALUE);
         _table.maxHeight(600);
         _table.setPrefWidth(windowHeight / 2);
         _table.setMinHeight(windowHeight / 2);
-        _table.setItems(applications);
         _table.setEditable(false);
         _table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         _table.setRowFactory(c -> getTableRow());
 
         VBox.setVgrow(_table, Priority.ALWAYS);
 
-        _table.getColumns().add(getRequestTableColumn());
-        _table.getColumns().add(getTableColumn(_table, StringColumns.Name));
-        _table.getColumns().add(getTableColumn(_table, StringColumns.Computer));
-        _table.getColumns().add(getTableColumn(_table, StringColumns.Group));
-        _table.getColumns().add(getTableColumn(_table, StringColumns.LaunchStatus));
-        _table.getColumns().add(getOnlineTableColumn(_table));
+        configureMenu();
 
-        table = _table;
+        Platform.runLater(() -> items.add(new LauncherTableItemInfo()));
+
         return _table;
     }
 
@@ -154,6 +157,69 @@ class LauncherTable {
                 }
             }
         };
+    }
+
+    private ContextMenu getContextMenu(LauncherTableItemInfo item){
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem start = new MenuItem("Start");
+
+        start.setOnAction(e -> {
+
+        });
+
+        MenuItem stop = new MenuItem("Stop");
+
+        stop.setOnAction(e -> {
+
+        });
+
+        MenuItem restart = new MenuItem("Restart");
+
+        restart.setOnAction(e -> {
+
+        });
+
+        MenuItem startGroup = new MenuItem("Start group");
+
+        startGroup.setOnAction(e -> {
+
+        });
+
+        MenuItem restartGroup = new MenuItem("Restart group");
+
+        restartGroup.setOnAction(e -> {
+
+        });
+
+        MenuItem stopGroup = new MenuItem("Stop group");
+
+        stopGroup.setOnAction(e -> {
+
+        });
+
+        MenuItem restartComputer = new MenuItem("Restart computer");
+
+        restartComputer.setOnAction(e -> {
+
+        });
+
+        MenuItem stopComputer = new MenuItem("Stop computer");
+
+        stopComputer.setOnAction(e -> {
+
+        });
+
+        contextMenu.getItems().add(start);
+        contextMenu.getItems().add(stop);
+        contextMenu.getItems().add(restart);
+        contextMenu.getItems().add(startGroup);
+        contextMenu.getItems().add(restartGroup);
+        contextMenu.getItems().add(stopGroup);
+        contextMenu.getItems().add(restartComputer);
+        contextMenu.getItems().add(stopComputer);
+
+        return contextMenu;
     }
 
     class LauncherTableItemInfo extends TableItemInfo{

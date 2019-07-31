@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 
 class LauncherMenu {
@@ -18,8 +17,11 @@ class LauncherMenu {
     private boolean isNewFile = false;
     private MainStage stage;
 
-    MenuBar getMenuBar(MainStage stage){
+    LauncherMenu(MainStage stage){
         this.stage = stage;
+    }
+
+    MenuBar getMenuBar(){
 
         MenuBar menuBar = new MenuBar();
         menuBar.setMaxWidth(Double.MAX_VALUE);
@@ -70,9 +72,7 @@ class LauncherMenu {
 
         editorVarItem.setAccelerator(new KeyCodeCombination(KeyCode.F2));
 
-        editorVarItem.setOnAction(e -> {
-
-        });
+        editorVarItem.setOnAction(e -> new VariableEditorStage());
 
         return editorVarItem;
     }
