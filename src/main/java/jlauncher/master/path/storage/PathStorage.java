@@ -13,7 +13,8 @@ public class PathStorage {
     private File currentPathToFile = new File(currentDir, configFileName);
 
     public void storeConfigDir(File dir){
-        currentPathToFile = dir;
+        currentDir = dir.toString();
+        currentPathToFile = new File(currentDir, configFileName);
     }
 
     public File getLogFile(String name){

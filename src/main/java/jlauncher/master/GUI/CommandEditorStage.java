@@ -1,6 +1,7 @@
 package jlauncher.master.GUI;
 
 import javafx.scene.layout.VBox;
+import jlauncher.master.controller.Controller;
 
 class CommandEditorStage {
 
@@ -10,9 +11,9 @@ class CommandEditorStage {
     private EditorTableMenu menu;
     private BaseStage stage = new BaseStage(windowWidth, windowHeight);
 
-    CommandEditorStage(){
+    CommandEditorStage(Controller controller){
+        menu = new EditorTableMenu(table, controller);
         stage.setTitle("Command Editor");
-        menu = new EditorTableMenu(table);
         stage.setRoot(new VBox(menu.getMenuBar(stage), table.getTable()));
     }
 

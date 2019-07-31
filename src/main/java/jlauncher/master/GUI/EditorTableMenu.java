@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jlauncher.master.controller.Controller;
 import jlauncher.master.path.storage.PathStorage;
 import java.io.File;
 
@@ -21,9 +22,11 @@ class EditorTableMenu {
     private boolean isNewFile = false;
     private AbstractTable abstractTable;
     private PathStorage pathStorage = PathStorage.getInstance();
+    private Controller controller;
 
-    EditorTableMenu(AbstractTable table){
+    EditorTableMenu(AbstractTable table, Controller controller){
         abstractTable = table;
+        this.controller = controller;
     }
 
     MenuBar getMenuBar(Stage stage){
@@ -120,7 +123,7 @@ class EditorTableMenu {
                 if(file != null){
                     isNewFile = false;
                     pathStorage.storeConfigDir(file);
-                    abstractTable.saveConfig();
+                    abstractTable.saveConfig(controller);
                 }
             }
 
@@ -141,7 +144,7 @@ class EditorTableMenu {
             if(file != null){
                 isNewFile = false;
                 pathStorage.storeConfigDir(file);
-                abstractTable.saveConfig();
+                abstractTable.saveConfig(controller);
             }
         });
 

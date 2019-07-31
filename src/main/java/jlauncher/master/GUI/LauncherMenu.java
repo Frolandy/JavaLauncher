@@ -10,15 +10,19 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jlauncher.master.controller.Controller;
+
 import java.io.File;
 
 class LauncherMenu {
 
     private boolean isNewFile = false;
     private MainStage stage;
+    private Controller controller;
 
-    LauncherMenu(MainStage stage){
+    LauncherMenu(MainStage stage, Controller controller){
         this.stage = stage;
+        this.controller = controller;
     }
 
     MenuBar getMenuBar(){
@@ -62,7 +66,7 @@ class LauncherMenu {
         MenuItem editorVarItem = new MenuItem("Command Editor");
 
         editorVarItem.setAccelerator(new KeyCodeCombination(KeyCode.F1));
-        editorVarItem.setOnAction(e -> new CommandEditorStage());
+        editorVarItem.setOnAction(e -> new CommandEditorStage(controller));
 
         return editorVarItem;
     }
@@ -72,7 +76,7 @@ class LauncherMenu {
 
         editorVarItem.setAccelerator(new KeyCodeCombination(KeyCode.F2));
 
-        editorVarItem.setOnAction(e -> new VariableEditorStage());
+        editorVarItem.setOnAction(e -> new VariableEditorStage(controller));
 
         return editorVarItem;
     }

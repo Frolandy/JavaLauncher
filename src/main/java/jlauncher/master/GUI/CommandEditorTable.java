@@ -7,9 +7,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import jlauncher.master.controller.Command;
+import jlauncher.master.controller.Controller;
 import jlauncher.master.path.storage.PathStorage;
 import jlauncher.utils.Callback;
 import jlauncher.utils.TableUtils;
+
+import java.util.ArrayList;
 
 class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableItemInfo> {
 
@@ -27,7 +31,10 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
     }
 
     @Override
-    public void saveConfig() {
+    public void saveConfig(Controller controller) {
+        ArrayList<Command> commands = new ArrayList<>();
+        items.forEach(item -> commands.add(new Command(item)));
+        controller.saveCommandConfig(commands);
         System.out.println("Save config " + pathStorage.getCurrentPathToFile());
     }
 

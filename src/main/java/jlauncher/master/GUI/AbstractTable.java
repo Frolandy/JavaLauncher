@@ -3,6 +3,7 @@ package jlauncher.master.GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
+import jlauncher.master.controller.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ abstract class AbstractTable<T> {
 
     void addNewItem(){}
 
-    void saveConfig(){}
+    void saveConfig(Controller controller){}
 
     void readConfig(){}
 

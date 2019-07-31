@@ -2,7 +2,9 @@ package jlauncher.master.GUI;
 
 import javafx.beans.property.*;
 
-abstract class TableItemInfo {
+import java.util.UUID;
+
+public abstract class TableItemInfo {
     private StringProperty computerAddress = new SimpleStringProperty("");
     private StringProperty appName = new SimpleStringProperty("");
     private StringProperty group = new SimpleStringProperty("");
@@ -10,7 +12,7 @@ abstract class TableItemInfo {
     private StringProperty dir = new SimpleStringProperty("");
     private BooleanProperty enable = new SimpleBooleanProperty(false);
     private StringProperty delay = new SimpleStringProperty("");
-    private StringProperty id = new SimpleStringProperty("");
+    private StringProperty id = new SimpleStringProperty(UUID.randomUUID().toString());
     private ObjectProperty<String[]> onStopCommands = new SimpleObjectProperty<>(new String[0]);
 
     public StringProperty getComputerAddressProperty() {

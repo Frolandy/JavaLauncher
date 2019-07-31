@@ -1,6 +1,7 @@
 package jlauncher.master.GUI;
 
 import javafx.scene.layout.VBox;
+import jlauncher.master.controller.Controller;
 
 class VariableEditorStage {
     private double windowHeight = 500;
@@ -9,8 +10,8 @@ class VariableEditorStage {
     private EditorTableMenu menu;
     private BaseStage stage = new BaseStage(windowWidth, windowHeight);
 
-    VariableEditorStage(){
-        menu = new EditorTableMenu(table);
+    VariableEditorStage(Controller controller){
+        menu = new EditorTableMenu(table, controller);
         stage.setTitle("Variable Editor");
         stage.setRoot(new VBox(menu.getMenuBar(stage), table.getTable()));
     }

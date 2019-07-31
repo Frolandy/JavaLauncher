@@ -1,7 +1,5 @@
 package jlauncher.utils;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -33,7 +31,7 @@ public class TableUtils {
             @Override
             public Unit apply(Unit arg) {
                 javafx.util.Callback<TableView<Row>, TableRow<Row>> _oldFactory = table.getRowFactory();
-                if(_oldFactory == null) _oldFactory = param -> new TableRow<Row>();
+                if(_oldFactory == null) _oldFactory = param -> new TableRow<>();
 
                 final javafx.util.Callback<TableView<Row>, TableRow<Row>> oldFactory = _oldFactory;
 
@@ -53,14 +51,8 @@ public class TableUtils {
             }
         });
 
-        table.rowFactoryProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                configureRowFactoryDecorator.apply(new Unit());
-            }
-        });
+        table.rowFactoryProperty().addListener(observable -> configureRowFactoryDecorator.apply(new Unit()));
         configureRowFactoryDecorator.apply(new Unit());
-
     }
 
     static class RecursionGuard<A>{

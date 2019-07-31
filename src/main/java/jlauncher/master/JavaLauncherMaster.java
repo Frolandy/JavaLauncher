@@ -3,6 +3,7 @@ package jlauncher.master;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import jlauncher.master.GUI.MainStage;
+import jlauncher.master.controller.Controller;
 
 
 public class JavaLauncherMaster extends Application {
@@ -13,6 +14,7 @@ public class JavaLauncherMaster extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        MainStage mainStage = new MainStage();
+        Controller controller = new Controller();
+        MainStage mainStage = new MainStage(controller);
     }
 }

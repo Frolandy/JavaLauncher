@@ -6,6 +6,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import jlauncher.master.controller.Controller;
+import jlauncher.master.controller.Variable;
 import jlauncher.utils.Callback;
 import jlauncher.utils.TableUtils;
 import java.util.ArrayList;
@@ -36,8 +38,10 @@ public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarIn
     }
 
     @Override
-    public void saveConfig() {
-
+    public void saveConfig(Controller controller) {
+        ArrayList<Variable> variables = new ArrayList<>();
+        items.forEach(item -> variables.add(new Variable(item.varName.getValue(), item.value.getValue(), item.id.getValue())));
+        controller.saveVariableConfig(variables);
     }
 
     private enum StringColumns{
