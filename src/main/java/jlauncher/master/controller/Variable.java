@@ -11,15 +11,15 @@ public class Variable {
         this.id = id;
     }
 
-    String getVariableName(){
+    public String getVariableName(){
         return variableName;
     }
 
-    String getValue(){
+    public String getValue(){
         return value;
     }
 
-    String getId(){
+    public String getId(){
         return id;
     }
 }

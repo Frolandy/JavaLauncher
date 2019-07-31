@@ -1,13 +1,18 @@
 package jlauncher.master.GUI;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import jlauncher.config.ConfigReader;
+import jlauncher.master.controller.Command;
 import jlauncher.master.controller.Controller;
 import jlauncher.master.controller.Variable;
+import jlauncher.master.path.storage.PathStorage;
 import jlauncher.utils.Callback;
 import jlauncher.utils.TableUtils;
 import java.util.ArrayList;
@@ -15,6 +20,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarInfo> {
+
+    private ConfigReader configReader = ConfigReader.getInstance();
+    private PathStorage pathStorage = PathStorage.getInstance();
 
     public void removeVariable(String variableName, String pathId){
         List<VarInfo> toRemove = new ArrayList<>();
@@ -34,7 +42,12 @@ public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarIn
     @Override
     public void readConfig(){
         items.clear();
-        //TODO: FileStorage.getCurrentPathToFile
+        ArrayList<Variable> variables = configReader.readVariables(pathStorage.getCurrentPathToFile());
+        Platform.runLater(() -> {
+            variables.forEach(variable -> {
+                items.add(new VarInfo(variable.getVariableName(), variable.getValue(), variable.getId()));
+            });
+        });
     }
 
     @Override
@@ -42,6 +55,7 @@ public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarIn
         ArrayList<Variable> variables = new ArrayList<>();
         items.forEach(item -> variables.add(new Variable(item.varName.getValue(), item.value.getValue(), item.id.getValue())));
         controller.saveVariableConfig(variables);
+        controller.updateAllStages();
     }
 
     private enum StringColumns{
@@ -49,19 +63,17 @@ public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarIn
     }
 
 
-    protected TableView<VarInfo> createNewTable(){
-        TableView<VarInfo> _table = super.createNewTable();
+    protected void createNewTable(){
+        super.createNewTable();
 
-        _table.setMaxWidth(Double.MAX_VALUE);
-        _table.setMaxHeight(Double.MAX_VALUE);
+        table.setMaxWidth(Double.MAX_VALUE);
+        table.setMaxHeight(Double.MAX_VALUE);
 
-        _table.setEditable(true);
+        table.setEditable(true);
 
-        VBox.setVgrow(_table, Priority.ALWAYS);
+        VBox.setVgrow(table, Priority.ALWAYS);
 
-        _table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        return _table;
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @Override
@@ -108,6 +120,16 @@ public class VariableEditorTable extends AbstractTable<VariableEditorTable.VarIn
         private StringProperty varName = new SimpleStringProperty("");
         private StringProperty value = new SimpleStringProperty("");
         private StringProperty id = new SimpleStringProperty(UUID.randomUUID().toString());
+
+        VarInfo(){
+
+        }
+
+        VarInfo(String varName, String value, String id){
+            this.varName.setValue(varName);
+            this.value.setValue(value);
+            this.id.setValue(id);
+        }
 
         StringProperty getVarNameProperty(){return varName;}
         StringProperty getValueProperty(){return value;}

@@ -1,5 +1,6 @@
 package jlauncher.master.GUI;
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -7,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import jlauncher.config.ConfigReader;
 import jlauncher.master.controller.Command;
 import jlauncher.master.controller.Controller;
 import jlauncher.master.path.storage.PathStorage;
@@ -19,6 +21,7 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
 
     private double windowHeight;
     private PathStorage pathStorage = PathStorage.getInstance();
+    private ConfigReader configReader = ConfigReader.getInstance();
 
     @Override
     public void addNewItem() {
@@ -27,7 +30,22 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
 
     @Override
     public void readConfig() {
-        System.out.println("Read config from dir " + pathStorage.getCurrentDir());
+        ArrayList<Command> commands = configReader.readCommands(pathStorage.getCurrentPathToFile());
+        Platform.runLater(() -> {
+            commands.forEach(command -> {
+                CommandTableItemInfo itemInfo = new CommandTableItemInfo();
+                itemInfo.setAppName(command.getAppName());
+                itemInfo.setCommand(command.getCommand());
+                itemInfo.setComputerAddress(command.getComputerAddress());
+                itemInfo.setGroup(command.getGroup());
+                itemInfo.setEnable(command.getEnable());
+                itemInfo.setDelay(command.getDelay());
+                itemInfo.setDirectory(command.getDir());
+                itemInfo.setId(command.getId());
+                itemInfo.setStopCommands(command.getOnStopCommands());
+                items.add(itemInfo);
+            });
+        });
     }
 
     @Override
@@ -35,7 +53,7 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
         ArrayList<Command> commands = new ArrayList<>();
         items.forEach(item -> commands.add(new Command(item)));
         controller.saveCommandConfig(commands);
-        System.out.println("Save config " + pathStorage.getCurrentPathToFile());
+        controller.updateAllStages();
     }
 
     private enum StringColumns{
@@ -46,18 +64,16 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
         this.windowHeight = windowHeight;
     }
 
-    protected TableView<CommandTableItemInfo> createNewTable(){
-        TableView<CommandTableItemInfo> _table = super.createNewTable();
+    protected void createNewTable(){
+        super.createNewTable();
 
-        _table.setMaxWidth(Double.MAX_VALUE);
-        _table.setMaxHeight(600);
-        _table.setPrefWidth(windowHeight / 2);
-        _table.setMaxHeight(windowHeight / 2);
-        _table.setEditable(true);
+        table.setMaxWidth(Double.MAX_VALUE);
+        table.setMaxHeight(600);
+        table.setPrefWidth(windowHeight / 2);
+        table.setMaxHeight(windowHeight / 2);
+        table.setEditable(true);
 
-        VBox.setVgrow(_table, Priority.ALWAYS);
-
-        return _table;
+        VBox.setVgrow(table, Priority.ALWAYS);
     }
 
     @Override
@@ -138,15 +154,21 @@ class CommandEditorTable extends AbstractTable<CommandEditorTable.CommandTableIt
 
         private void setButtonStyleClass(boolean isAction){
             if(getEnableProperty().get()) {
-                if(isAction) setEnable(false);
+                if(isAction) setEnable(true);
                 enableButton.getStyleClass().clear();
                 enableButton.getStyleClass().add("rb-on");
             }
             else {
-                if(isAction) setEnable(true);
+                if(isAction) setEnable(false);
                 enableButton.getStyleClass().clear();
                 enableButton.getStyleClass().add("rb-off");
             }
+        }
+
+        @Override
+        public void setEnable(boolean value){
+            super.setEnable(value);
+            setButtonStyleClass(false);
         }
 
         ObjectProperty<Node> getButtonProperty(){

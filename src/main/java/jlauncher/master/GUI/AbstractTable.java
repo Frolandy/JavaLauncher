@@ -28,16 +28,16 @@ abstract class AbstractTable<T> {
     void readConfig(){}
 
     public TableView<T> getTable(){
-        if(table == null) return createNewTable();
-        else return table;
+        if(table == null) createNewTable();
+        readConfig();
+        return table;
     }
 
-    protected TableView<T> createNewTable(){
+    protected void createNewTable(){
         TableView<T> _table = new TableView<>(items);
         _table.setItems(items);
         table = _table;
         setColumns();
-        return _table;
     }
 
     abstract void setColumns();

@@ -15,6 +15,5 @@ public class JavaLauncherMaster extends Application {
     @Override
     public void start(Stage primaryStage) {
         Controller controller = new Controller();
-        MainStage mainStage = new MainStage(controller);
     }
 }

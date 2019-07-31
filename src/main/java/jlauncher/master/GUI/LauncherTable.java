@@ -9,12 +9,19 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import jlauncher.config.ConfigReader;
+import jlauncher.master.controller.Command;
+import jlauncher.master.path.storage.PathStorage;
 import jlauncher.utils.Callback;
 import jlauncher.utils.TableUtils;
+
+import java.util.ArrayList;
 
 class LauncherTable extends AbstractTable<LauncherTable.LauncherTableItemInfo> {
 
     private double windowHeight;
+    private PathStorage pathStorage = PathStorage.getInstance();
+    private ConfigReader configReader = ConfigReader.getInstance();
 
     public enum LaunchStatus{
         Started, Stopped, Empty
@@ -41,10 +48,6 @@ class LauncherTable extends AbstractTable<LauncherTable.LauncherTableItemInfo> {
         this.windowHeight = windowHeight;
     }
 
-    void removeItem(LauncherTableItemInfo item){
-        items.remove(item);
-    }
-
     @Override
     void setColumns() {
         table.getColumns().add(getRequestTableColumn());
@@ -55,25 +58,43 @@ class LauncherTable extends AbstractTable<LauncherTable.LauncherTableItemInfo> {
         table.getColumns().add(getOnlineTableColumn(table));
     }
 
-    protected TableView<LauncherTableItemInfo> createNewTable(){
-        TableView<LauncherTableItemInfo> _table = super.createNewTable();
+    @Override
+    void readConfig(){
+        ArrayList<Command> commands = configReader.readCommands(pathStorage.getCurrentPathToFile());
+        Platform.runLater(() -> {
+            commands.forEach(command -> {
+                if(command.getEnable()) {
+                    LauncherTableItemInfo itemInfo = new LauncherTableItemInfo();
+                    itemInfo.setAppName(command.getAppName());
+                    itemInfo.setCommand(command.getCommand());
+                    itemInfo.setComputerAddress(command.getComputerAddress());
+                    itemInfo.setGroup(command.getGroup());
+                    itemInfo.setEnable(command.getEnable());
+                    itemInfo.setDelay(command.getDelay());
+                    itemInfo.setDirectory(command.getDir());
+                    itemInfo.setId(command.getId());
+                    itemInfo.setStopCommands(command.getOnStopCommands());
+                    items.add(itemInfo);
+                }
+            });
+        });
+    }
 
-        _table.setMaxWidth(Double.MAX_VALUE);
-        _table.setPrefHeight(Double.MAX_VALUE);
-        _table.maxHeight(600);
-        _table.setPrefWidth(windowHeight / 2);
-        _table.setMinHeight(windowHeight / 2);
-        _table.setEditable(false);
-        _table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        _table.setRowFactory(c -> getTableRow());
+    protected void createNewTable(){
+        super.createNewTable();
 
-        VBox.setVgrow(_table, Priority.ALWAYS);
+        table.setMaxWidth(Double.MAX_VALUE);
+        table.setPrefHeight(Double.MAX_VALUE);
+        table.maxHeight(600);
+        table.setPrefWidth(windowHeight / 2);
+        table.setMinHeight(windowHeight / 2);
+        table.setEditable(false);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setRowFactory(c -> getTableRow());
+
+        VBox.setVgrow(table, Priority.ALWAYS);
 
         configureMenu();
-
-        Platform.runLater(() -> items.add(new LauncherTableItemInfo()));
-
-        return _table;
     }
 
     private TableColumn<LauncherTableItemInfo, String> getTableColumn(TableView<LauncherTableItemInfo> _table, StringColumns column){

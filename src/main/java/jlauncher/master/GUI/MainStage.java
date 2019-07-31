@@ -20,9 +20,10 @@ public class MainStage {
         stage.setRoot(vbox);
     }
 
-    public void removeItem(LauncherTable.LauncherTableItemInfo item){
-        javafx.application.Platform.runLater(() -> table.removeItem(item));
-    }
-
     Stage getPrimaryStage() { return this.stage; }
+
+    public void updateAllStages(){
+        table.clear();
+        table.readConfig();
+    }
 }

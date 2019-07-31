@@ -125,8 +125,7 @@ class EditorTableMenu {
                     pathStorage.storeConfigDir(file);
                     abstractTable.saveConfig(controller);
                 }
-            }
-
+            }else abstractTable.saveConfig(controller);
         });
 
         return saveMenuItem;

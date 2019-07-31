@@ -1,20 +1,18 @@
 package jlauncher.master.controller;
 
 import com.typesafe.config.ConfigValueFactory;
-import javafx.stage.FileChooser;
 import jlauncher.config.ConfigReader;
+import jlauncher.master.GUI.MainStage;
 import jlauncher.master.path.storage.PathStorage;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
 
 public class Controller {
 
     private ConfigReader configReader = ConfigReader.getInstance();
     private PathStorage pathStorage = PathStorage.getInstance();
+    MainStage mainStage = new MainStage(this);
 
     public void start(ArrayList<Command> commands){
 
@@ -121,5 +119,9 @@ public class Controller {
             writer.write("    }\n");
         });
         writer.write("  ]\n");
+    }
+
+    public void updateAllStages(){
+        mainStage.updateAllStages();
     }
 }
